@@ -2,8 +2,11 @@ import {
   Entity,
   Column,
   CreateDateColumn,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable
 } from 'typeorm'
+import Skill from './Skill'
 
 @Entity()
 class User {
@@ -30,6 +33,10 @@ class User {
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt!: Date
+
+  @ManyToMany(() => Skill)
+  @JoinTable()
+  skills: Skill[]
 }
 
 export default User

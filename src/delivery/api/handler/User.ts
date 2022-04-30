@@ -13,15 +13,15 @@ export class UserHandler {
   constructor(router, userUseCase) {
     this.userUseCase = userUseCase
 
-    router.get('/users/', this.findAll)
+    router.get('/users', this.findUser)
     router.post('/users', this.create)
   }
 
-  public findAll = async (req: Request, res: Response, next: NextFunction) => {
+  public findUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const cpf = req.query.cpf
-      const email = req.query.email
-      const telephone = req.query.telephone
+      const cpf = req.query.cpf ? req.query.cpf : ''
+      const email = req.query.email ? req.query.email : ''
+      const telephone = req.query.telephone ? req.query.telephone : ''
 
       const payload = {
         cpf: String(cpf),
@@ -30,8 +30,7 @@ export class UserHandler {
       }
 
       const user = await this.userUseCase.findUser({ ...payload })
-
-      res.status(200).json(user)
+      res.status(200).json({ data: user })
     } catch (err) {
       next(err)
     }
@@ -39,18 +38,25 @@ export class UserHandler {
 
   public create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, cpf, birthDate, email, telephone }: UserCreateInput =
-        req.body
+      const {
+        name,
+        cpf,
+        birthDate,
+        email,
+        telephone,
+        skills
+      }: UserCreateInput = req.body
 
       const user = await this.userUseCase.create({
         name,
         cpf,
         birthDate,
         email,
-        telephone
+        telephone,
+        skills
       })
 
-      res.send(user)
+      res.status(201).send(user)
     } catch (error) {
       next(error)
     }

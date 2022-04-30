@@ -4,4 +4,5 @@ export type UserCreateInput = {
   email?: string
   telephone?: string
   birthDate?: string
+  skills?: number[]
 }
