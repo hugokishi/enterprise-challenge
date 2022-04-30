@@ -1,0 +1,54 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "removeComments": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/@types"
+    ],
+    "strict": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./",
+    "paths": {
+      "@handler/*": [
+        "./src/delivery/api/handler/*"
+      ],
+      "@driver/*": [
+        "./src/driver/*"
+      ],
+      "@app/*": [
+        "./src/app/*"
+      ],
+      "@api/*": [
+        "./src/delivery/api/*"
+      ],
+      "@domain/*": [
+        "./src/domain/*"
+      ],
+      "@repository/*": [
+        "./src/repository/*"
+      ],
+      "@usecase/*": [
+        "./src/usecase/*"
+      ],
+      "@interfaces/*": [
+        "./src/interfaces/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
