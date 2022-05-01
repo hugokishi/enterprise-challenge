@@ -1,7 +1,7 @@
 import {
   CertificateRepository,
   init as initCertificateRepository
-} from './../repository/Certificate'
+} from '@repository/Certificate'
 import { Logger, init as initLogger } from '@app/logger'
 import {
   User,

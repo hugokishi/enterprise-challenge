@@ -11,5 +11,10 @@ module.exports = {
   cli: {
     entitiesDir: 'src/domain/entity',
     migrationsDir: 'src/domain/migration'
+  },
+  extra: {
+    ssl: {
+      rejectUnauthorized: false
+    }
   }
 }
