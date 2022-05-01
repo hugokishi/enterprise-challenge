@@ -4,6 +4,7 @@ export type UserCreateInput = {
   name: string
   cpf?: string
   email?: string
+  gender?: string
   telephone?: string
   birthDate?: string
   skills?: number[]

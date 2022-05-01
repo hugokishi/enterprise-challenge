@@ -8,7 +8,7 @@ import tracer from '@app/tracer'
 import { init as InitErrorMiddleware } from './middleware/Error'
 
 import HealthHandler from '@handler/Health'
-import UserHandler from '@handler/User'
+import CandidateHandler from '@handler/Candidate'
 
 const defineMiddelwares = async (router, express) => {
   router.use(express.json())
@@ -41,7 +41,7 @@ const defineMiddelwares = async (router, express) => {
 
 const defineHandlers = () => {
   HealthHandler()
-  UserHandler()
+  CandidateHandler()
 }
 
 const init = (router, express) => {

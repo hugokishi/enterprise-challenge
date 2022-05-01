@@ -4,36 +4,43 @@ import {
   Request,
   Response
 } from '@driver/http/express'
-import { UserUseCase, init as initUserUseCase } from '@usecase/User'
+import {
+  CandidateUseCase,
+  init as initCandidateUseCase
+} from '@usecase/Candidate'
 import { UserCreateInput } from '@interfaces/User'
 
-export class UserHandler {
-  private userUseCase: UserUseCase
+export class CandidateHandler {
+  private candidateUseCase: CandidateUseCase
 
-  constructor(router, userUseCase) {
-    this.userUseCase = userUseCase
+  constructor(router, candidateUseCase) {
+    this.candidateUseCase = candidateUseCase
 
-    router.get('/users', this.findUser)
-    router.post('/users', this.create)
+    router.get('/candidates', this.findUser)
+    router.post('/candidates', this.create)
   }
 
   public findUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const cpf = req.query.cpf ? req.query.cpf : ''
       const email = req.query.email ? req.query.email : ''
-      const telephone = req.query.telephone ? req.query.telephone : ''
+      const name = req.query.name ? req.query.name : ''
       const skills = req.query.skills
         ? req.query.skills.toString().split(',')
+        : ''
+      const certificates = req.query.certificates
+        ? req.query.certificates.toString().split(',')
         : ''
 
       const payload = {
         cpf: String(cpf),
         email: String(email),
-        telephone: String(telephone),
-        skills: skills
+        name: String(name),
+        skills: skills,
+        certificates: certificates
       }
 
-      const user = await this.userUseCase.findUser({ ...payload })
+      const user = await this.candidateUseCase.findUser({ ...payload })
       res.status(200).json({ data: user })
     } catch (err) {
       next(err)
@@ -46,17 +53,19 @@ export class UserHandler {
         name,
         cpf,
         birthDate,
+        gender,
         email,
         telephone,
         skills,
         certificates
       }: UserCreateInput = req.body
 
-      const user = await this.userUseCase.create({
+      const user = await this.candidateUseCase.create({
         name,
         cpf,
         birthDate,
         email,
+        gender,
         telephone,
         skills,
         certificates
@@ -71,9 +80,9 @@ export class UserHandler {
 
 export const init = () => {
   const router = InitRouter()
-  const userUseCase = initUserUseCase()
+  const candidateUseCase = initCandidateUseCase()
 
-  return new UserHandler(router, userUseCase)
+  return new CandidateHandler(router, candidateUseCase)
 }
 
 export default init

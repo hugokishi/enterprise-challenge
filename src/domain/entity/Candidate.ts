@@ -11,7 +11,7 @@ import Certificate from './Certificate'
 import Skill from './Skill'
 
 @Entity()
-class User {
+class Candidate {
   @PrimaryGeneratedColumn('increment')
   id?: number
 
@@ -30,6 +30,9 @@ class User {
   @Column({ nullable: false })
   birthDate?: string
 
+  @Column({ nullable: false })
+  gender?: string
+
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date
 
@@ -40,8 +43,8 @@ class User {
   @JoinTable()
   skills: Skill[]
 
-  @OneToMany(() => Certificate, (certificate) => certificate.user)
+  @OneToMany(() => Certificate, (certificate) => certificate.candidate)
   certificates: Certificate[]
 }
 
-export default User
+export default Candidate

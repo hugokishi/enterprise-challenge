@@ -4,21 +4,26 @@ import {
 } from '@repository/Certificate'
 import { Logger, init as initLogger } from '@app/logger'
 import {
-  User,
-  UserRepository,
-  init as initUserRepository
-} from '@repository/User'
+  Candidate,
+  CandidateRepository,
+  init as initCandidateRepository
+} from '@repository/Candidate'
 import { SkillRepository, init as initSkillRepository } from '@repository/Skill'
 
-export class UserUseCase {
+export class CandidateUseCase {
   private log: Logger
-  private userRepository: UserRepository
+  private candidateRepository: CandidateRepository
   private skillRepository: SkillRepository
   private certificateRepository: CertificateRepository
 
-  constructor({ log, userRepository, skillRepository, certificateRepository }) {
+  constructor({
+    log,
+    candidateRepository,
+    skillRepository,
+    certificateRepository
+  }) {
     this.log = log
-    this.userRepository = userRepository
+    this.candidateRepository = candidateRepository
     this.skillRepository = skillRepository
     this.certificateRepository = certificateRepository
   }
@@ -26,28 +31,35 @@ export class UserUseCase {
   public findUser = async ({
     cpf,
     email,
-    telephone,
-    skills
+    name,
+    skills,
+    certificates
   }: {
     cpf: string
     email: string
-    telephone: string
+    name: string
     skills: string | string[]
+    certificates: string | string[]
   }): Promise<any> => {
+    if (certificates.length > 0) {
+      return this.candidateRepository.findByCertificates({
+        certificates
+      })
+    }
     if (skills.length > 0) {
-      return this.userRepository.findBySkills({
+      return this.candidateRepository.findBySkills({
         skills
       })
     }
-    return this.userRepository.getUser({
+    return this.candidateRepository.getUserBy({
       cpf,
       email,
-      telephone
+      name
     })
   }
 
-  public create = async (user: any): Promise<User> => {
-    const existentUser = await this.userRepository.getUser({
+  public create = async (user: any): Promise<Candidate> => {
+    const existentUser = await this.candidateRepository.getUser({
       cpf: user.cpf,
       email: user.email,
       telephone: user.telephone
@@ -82,19 +94,19 @@ export class UserUseCase {
     user.skills = skills
     user.certificates = certificates
 
-    return this.userRepository.create(user)
+    return this.candidateRepository.create(user)
   }
 }
 
 export const init = () => {
   const log = initLogger()
-  const userRepository = initUserRepository()
+  const candidateRepository = initCandidateRepository()
   const skillRepository = initSkillRepository()
   const certificateRepository = initCertificateRepository()
 
-  return new UserUseCase({
+  return new CandidateUseCase({
     log,
-    userRepository,
+    candidateRepository,
     skillRepository,
     certificateRepository
   })

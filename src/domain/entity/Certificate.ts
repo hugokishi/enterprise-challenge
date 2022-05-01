@@ -6,7 +6,7 @@ import {
   ManyToOne
 } from 'typeorm'
 import Skill from './Skill'
-import User from './User'
+import Candidate from './Candidate'
 
 @Entity()
 class Certificate {
@@ -22,8 +22,8 @@ class Certificate {
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt!: Date
 
-  @ManyToOne(() => User, (user) => user.certificates)
-  user: User
+  @ManyToOne(() => Candidate, (candidate) => candidate.certificates)
+  candidate: Candidate
 
   @ManyToOne(() => Skill, (skill) => skill.certificates)
   skill: Skill
