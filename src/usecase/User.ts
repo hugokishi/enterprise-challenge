@@ -1,3 +1,7 @@
+import {
+  CertificateRepository,
+  init as initCertificateRepository
+} from './../repository/Certificate'
 import { Logger, init as initLogger } from '@app/logger'
 import {
   User,
@@ -10,22 +14,31 @@ export class UserUseCase {
   private log: Logger
   private userRepository: UserRepository
   private skillRepository: SkillRepository
+  private certificateRepository: CertificateRepository
 
-  constructor({ log, userRepository, skillRepository }) {
+  constructor({ log, userRepository, skillRepository, certificateRepository }) {
     this.log = log
     this.userRepository = userRepository
     this.skillRepository = skillRepository
+    this.certificateRepository = certificateRepository
   }
 
   public findUser = async ({
     cpf,
     email,
-    telephone
+    telephone,
+    skills
   }: {
     cpf: string
     email: string
     telephone: string
-  }): Promise<User> => {
+    skills: string | string[]
+  }): Promise<any> => {
+    if (skills.length > 0) {
+      return this.userRepository.findBySkills({
+        skills
+      })
+    }
     return this.userRepository.getUser({
       cpf,
       email,
@@ -60,7 +73,14 @@ export class UserUseCase {
       }
     }
 
+    user.certificates.skill = skills[0]
+
+    const certificates = await this.certificateRepository.create(
+      user.certificates
+    )
+
     user.skills = skills
+    user.certificates = certificates
 
     return this.userRepository.create(user)
   }
@@ -70,8 +90,14 @@ export const init = () => {
   const log = initLogger()
   const userRepository = initUserRepository()
   const skillRepository = initSkillRepository()
+  const certificateRepository = initCertificateRepository()
 
-  return new UserUseCase({ log, userRepository, skillRepository })
+  return new UserUseCase({
+    log,
+    userRepository,
+    skillRepository,
+    certificateRepository
+  })
 }
 
 export default init

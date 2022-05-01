@@ -3,12 +3,13 @@ import {
   Column,
   CreateDateColumn,
   PrimaryGeneratedColumn,
-  OneToMany
+  ManyToOne
 } from 'typeorm'
-import Certificate from './Certificate'
+import Skill from './Skill'
+import User from './User'
 
 @Entity()
-class Skill {
+class Certificate {
   @PrimaryGeneratedColumn('increment')
   id?: number
 
@@ -21,8 +22,11 @@ class Skill {
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt!: Date
 
-  @OneToMany(() => Certificate, (certificate) => certificate.skill)
-  certificates: Certificate[]
+  @ManyToOne(() => User, (user) => user.certificates)
+  user: User
+
+  @ManyToOne(() => Skill, (skill) => skill.certificates)
+  skill: Skill
 }
 
-export default Skill
+export default Certificate

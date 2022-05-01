@@ -22,11 +22,15 @@ export class UserHandler {
       const cpf = req.query.cpf ? req.query.cpf : ''
       const email = req.query.email ? req.query.email : ''
       const telephone = req.query.telephone ? req.query.telephone : ''
+      const skills = req.query.skills
+        ? req.query.skills.toString().split(',')
+        : ''
 
       const payload = {
         cpf: String(cpf),
         email: String(email),
-        telephone: String(telephone)
+        telephone: String(telephone),
+        skills: skills
       }
 
       const user = await this.userUseCase.findUser({ ...payload })
@@ -44,7 +48,8 @@ export class UserHandler {
         birthDate,
         email,
         telephone,
-        skills
+        skills,
+        certificates
       }: UserCreateInput = req.body
 
       const user = await this.userUseCase.create({
@@ -53,7 +58,8 @@ export class UserHandler {
         birthDate,
         email,
         telephone,
-        skills
+        skills,
+        certificates
       })
 
       res.status(201).send(user)

@@ -30,27 +30,21 @@ export class UserRepository {
       .orWhere('user.telephone = :telephone', { telephone })
       .orWhere('user.email = :email', { email })
       .leftJoinAndSelect('user.skills', 'skills')
+      .leftJoinAndSelect('user.certificates', 'certificates')
       .getOne()
   }
 
-  public findBy = ({
-    cpf,
-    telephone,
-    email,
-    skill
+  public findBySkills = ({
+    skills
   }: {
-    cpf: string
-    telephone: string
-    email: string
-    skill: string
-  }): Promise<User> => {
+    skills: string[] | string
+  }): Promise<User[]> => {
     return this.database
       .createQueryBuilder('user')
-      .where('user.cpf = :cpf', { cpf })
-      .orWhere('user.telephone = :telephone', { telephone })
-      .orWhere('user.email = :email', { email })
       .leftJoinAndSelect('user.skills', 'skills')
-      .getOne()
+      .leftJoinAndSelect('user.certificates', 'certificates')
+      .where('skills.name IN (:...name)', { name: skills })
+      .getMany()
   }
 }
 

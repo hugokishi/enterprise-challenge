@@ -4,8 +4,10 @@ import {
   CreateDateColumn,
   PrimaryGeneratedColumn,
   ManyToMany,
-  JoinTable
+  JoinTable,
+  OneToMany
 } from 'typeorm'
+import Certificate from './Certificate'
 import Skill from './Skill'
 
 @Entity()
@@ -37,6 +39,9 @@ class User {
   @ManyToMany(() => Skill)
   @JoinTable()
   skills: Skill[]
+
+  @OneToMany(() => Certificate, (certificate) => certificate.user)
+  certificates: Certificate[]
 }
 
 export default User
